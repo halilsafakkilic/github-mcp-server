@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "server_stdio": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/ABSOLUTE/PROJECT/PATH",
+        "run",
+        "server"
+      ]
+    },
+    "server_sse": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "http://localhost:8080/sse"
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+[project]
+name = "github-explorer"
+version = "0.1.0"
+description = "A simple MCP GitHub explorer server"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1",
+    "mcp[cli]>=1.2.0",
+    "requests>=2.32.3",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[build-system]
+requires = ["hatchling", ]
+build-backend = "hatchling.build"
+
+[project.scripts]
+server = "server:main"
+server_sse = "server_sse:main"
