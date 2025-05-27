@@ -1,18 +1,18 @@
 import asyncio
 
-from mcp.client.sse import sse_client
+from mcp.client.streamable_http import streamablehttp_client
 from mcp import ClientSession
 from mcp.types import CallToolResult
 from pydantic import AnyUrl
 
 server_params = {
-    "url": "http://localhost:8081/sse",
+    "url": "http://localhost:8080/mcp/",
 }
 
 
 async def main():
-    async with sse_client(**server_params) as (sse, write):
-        async with ClientSession(sse, write) as session:
+    async with streamablehttp_client(**server_params) as (shttp, write, _):
+        async with ClientSession(shttp, write) as session:
             await session.initialize()
 
             response = await session.list_resources()

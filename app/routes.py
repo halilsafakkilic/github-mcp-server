@@ -1,12 +1,8 @@
 from starlette.responses import PlainTextResponse
 from starlette.requests import Request
-from starlette.routing import Route
+from app.server import mcp_server
 
 
-async def health(request: Request) -> PlainTextResponse:
+@mcp_server.custom_route("/health", methods=["GET"])
+async def health_check(request: Request) -> PlainTextResponse:
     return PlainTextResponse("OK")
-
-
-starlette_routes = [
-    Route("/health", methods=["GET"], endpoint=health),
-]

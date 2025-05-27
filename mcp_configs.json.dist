@@ -13,7 +13,14 @@
       "command": "npx",
       "args": [
         "mcp-remote",
-        "http://localhost:8080/sse"
+        "http://localhost:8081/sse"
+      ]
+    },
+    "server_shttp": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "http://localhost:8080/mcp"
       ]
     }
   }

@@ -1,11 +1,11 @@
 # GitHub Explorer MCP Server
 
-This project is a server using the MCP (Model Context Protocol) standard to list GitHub user repositories. It can operate over different communication protocols (stdio and SSE).
+This project is a server using the MCP (Model Context Protocol) standard to list GitHub user repositories. It can operate over different communication protocols (stdio, Streamable HTTP and SSE).
 
 ## Features
 
 - GitHub user repository listing
-- Support for stdio and SSE (Server-Sent Events) protocols
+- Support for stdio, Streamable HTTP and SSE (Server-Sent Events) protocols
 - Customized FastMCP configuration
 - Basic File logging system
 
@@ -26,6 +26,12 @@ You can start the server in two different modes:
 
 ```bash
 uv run server
+```
+
+### Streamable Http Mode
+
+```bash
+uv run server_shttp
 ```
 
 ### SSE (Server-Sent Events) Mode
@@ -77,12 +83,15 @@ npx -y @modelcontextprotocol/inspector uv run server
 # Using stdio with config file
 npx -y @modelcontextprotocol/inspector --config mcp_configs.json --server server_stdio
 
+# Using Streamable HTTP
+npx -y @modelcontextprotocol/inspector --config mcp_configs.json --server server_shttp
+
 # Using SSE
 npx -y @modelcontextprotocol/inspector --config mcp_configs.json --server server_sse
 ```
 
-### SSE Health Check
-To check the health of the SSE server, you can use the following command:
+## SSE + Streamable HTTP Health Check
+To check the health of the SSE or Streamable HTTP server, you can use the following command:
 
 ```bash
 curl -X GET http://localhost:8080/health
@@ -98,6 +107,15 @@ The `client_stdio.py` demonstrates how to connect to the server using the **stdi
 
 ```bash
 uv run client_stdio.py
+```
+
+### Streamable HTTP Client
+
+The `client_shttp.py` demonstrates how to connect to the server using **Streamable HTTP** protocol:
+
+```bash
+# Run the Streamable HTTP client (make sure server_shttp.py is running)
+uv run client_shttp.py
 ```
 
 ### SSE Client

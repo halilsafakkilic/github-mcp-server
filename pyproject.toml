@@ -5,8 +5,7 @@ description = "A simple MCP GitHub explorer server"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "httpx>=0.28.1",
-    "mcp[cli]>=1.2.0",
+    "fastmcp>=2.5.1",
     "requests>=2.32.3",
 ]
 
@@ -20,3 +19,4 @@ build-backend = "hatchling.build"
 [project.scripts]
 server = "server:main"
 server_sse = "server_sse:main"
+server_shttp = "server_shttp:main"
