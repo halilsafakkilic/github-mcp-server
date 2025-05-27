@@ -7,12 +7,17 @@ import uvicorn
 
 class CustomFastMCP(FastMCP):
     async def run_sse_async(
-        self, starlette_params: Optional[dict] = None, uvicorn_config_params: Optional[dict] = None
+        self,
+        starlette_params: Optional[dict] = None,
+        starlette_routes: Optional[list] = None,
+        uvicorn_config_params: Optional[dict] = None,
     ) -> None:
-        """Run the server using SSE transport."""
+        # Starlette configuration
         from starlette.applications import Starlette
 
         starlette_params = starlette_params or {}
+        starlette_routes = starlette_routes or []
+
         if "debug" not in starlette_params:
             starlette_params["debug"] = self.settings.debug
 
@@ -34,8 +39,16 @@ class CustomFastMCP(FastMCP):
                 Mount("/messages/", app=sse.handle_post_message),
             ]
 
+        # Route merging
+        if starlette_routes:
+            if "routes" in starlette_params:
+                starlette_params["routes"].extend(starlette_routes)
+            else:
+                starlette_params["routes"] = starlette_routes
+
         starlette_app = Starlette(**starlette_params)
 
+        # Uvicorn configuration
         uvicorn_config_params = uvicorn_config_params or {}
         if "host" not in uvicorn_config_params:
             uvicorn_config_params["host"] = self.settings.host
@@ -49,4 +62,5 @@ class CustomFastMCP(FastMCP):
         config = uvicorn.Config(starlette_app, **uvicorn_config_params)
 
         server = uvicorn.Server(config)
+
         await server.serve()

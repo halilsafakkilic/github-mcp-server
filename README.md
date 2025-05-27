@@ -81,6 +81,13 @@ npx -y @modelcontextprotocol/inspector --config mcp_configs.json --server server
 npx -y @modelcontextprotocol/inspector --config mcp_configs.json --server server_sse
 ```
 
+### SSE Health Check
+To check the health of the SSE server, you can use the following command:
+
+```bash
+curl -X GET http://localhost:8080/health
+```
+
 ## Client Usage
 
 This project includes example clients for both stdio and SSE protocols.
