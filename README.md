@@ -9,12 +9,25 @@ This project is a server using the MCP (Model Context Protocol) standard to list
 - Customized FastMCP configuration
 - Basic File logging system
 
+## Requirements
+
+- **Python**: 3.12 or higher
+- **Package Manager**: [uv](https://github.com/astral-sh/uv)
+- **Node.js**: 18+ (required only for MCP Inspector)
+
+### Dependencies
+
+Core dependencies:
+- `fastmcp`: FastMCP framework for building MCP servers
+- `requests`: HTTP client for making requests
+- `uvicorn`: ASGI server
+- `python-dotenv`: Environment variable management
+
 ## Installation
 
-Requirements to run this project:
+Install dependencies using uv:
 
 ```bash
-# Install dependencies using uv
 uv sync
 ```
 
@@ -71,7 +84,7 @@ Before using the Inspector or client examples, you need to create a proper confi
      ]
    }
    ```
-   Replace `/YOUR/ABSOLUTE/PROJECT/PATH` with the absolute path to your project directory.
+Replace `/YOUR/ABSOLUTE/PROJECT/PATH` with the absolute path to your project directory.
 
 
 To test the server with MCP Inspector:
@@ -131,11 +144,19 @@ uv run client_sse.py
 ## Project Structure
 
 - `server.py`: Main server for stdio protocol
+- `server_shttp.py`: Main server for Streamable HTTP protocol
 - `server_sse.py`: Main server for SSE protocol
 - `client_stdio.py`: Example client using stdio protocol
+- `client_shttp.py`: Example client using Streamable HTTP protocol
 - `client_sse.py`: Example client using SSE protocol
 - `app/`: Application logic and services
+  - `server.py`: MCP server initialization
+  - `routes.py`: Resource and prompt definitions
+  - `services.py`: Business logic and tool implementations
 - `lib/`: Custom library files
+  - `custom_fastmcp.py`: Extended FastMCP with async HTTP support
+  - `response.py`: Response formatting utilities
+  - `utils.py`: Utility functions
 - `logs/`: Logging directory
 - `mcp_configs.json`: MCP configuration settings for Inspector and example usage
 

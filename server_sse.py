@@ -1,8 +1,8 @@
 from app.server import mcp_server
-
+from app.constants import SSE_PORT
 
 mcp_server.settings.host = "0.0.0.0"
-mcp_server.settings.port = 8081
+mcp_server.settings.port = SSE_PORT
 
 uvicorn_config_params = {"timeout_graceful_shutdown": 5}
 

@@ -5,9 +5,13 @@ from mcp import ClientSession
 from mcp.types import CallToolResult
 from pydantic import AnyUrl
 
+from app.constants import SHTTP_PORT
+
 server_params = {
-    "url": "http://localhost:8080/mcp/",
+    "url": f"http://localhost:{SHTTP_PORT}/mcp/",
 }
+
+# DEPRECATION WARNING: streamable_http transport is deprecated and will be removed in future versions. Please use SSE or WebSocket transports instead.
 
 
 async def main():

@@ -5,8 +5,10 @@ from mcp import ClientSession
 from mcp.types import CallToolResult
 from pydantic import AnyUrl
 
+from app.constants import SSE_PORT
+
 server_params = {
-    "url": "http://localhost:8081/sse",
+    "url": f"http://localhost:{SSE_PORT}/sse",
 }
 
 
