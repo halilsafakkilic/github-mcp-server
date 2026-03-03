@@ -5,6 +5,8 @@ This project is a server using the MCP (Model Context Protocol) standard to list
 ## Features
 
 - GitHub user repository listing
+- **Context**: Progress reporting and structured logging
+- **Sampling**: LLM-powered repository analysis (requires Anthropic API key)
 - Support for stdio, Streamable HTTP and SSE (Server-Sent Events) protocols
 - Customized FastMCP configuration
 - Basic File logging system
@@ -29,6 +31,21 @@ Install dependencies using uv:
 
 ```bash
 uv sync
+```
+
+### Enable Sampling (optional)
+
+To use the `analyze_user_repos` tool (LLM-powered analysis), install the Anthropic SDK and configure your API key:
+
+```bash
+uv add anthropic
+```
+
+Then add your API key to `.env`:
+
+```env
+ANTHROPIC_API_KEY=sk-ant-...
+ANTHROPIC_MODEL=claude-haiku-4-5-20251001  # optional, this is the default
 ```
 
 ## Server Usage
@@ -152,21 +169,21 @@ uv run client_sse.py
 - `app/`: Application logic and services
   - `server.py`: MCP server initialization
   - `routes.py`: Resource and prompt definitions
-  - `services.py`: Business logic and tool implementations
+  - `services.py`: Business logic and tool implementations (Context + Sampling)
 - `lib/`: Custom library files
   - `custom_fastmcp.py`: Extended FastMCP with async HTTP support
   - `response.py`: Response formatting utilities
   - `utils.py`: Utility functions
+  - `sampling.py`: Sampling handler builder (Anthropic integration)
+- `tests/`: Test suite
 - `logs/`: Logging directory
 - `mcp_configs.json`: MCP configuration settings for Inspector and example usage
 
 ## API Tools
 
-Currently, there is one API tool available:
-
 ### get_user_repos
 
-A tool that lists the public repositories of a GitHub user.
+Lists the public repositories of a GitHub user. Uses **Context** to report progress and log messages to the MCP client.
 
 Parameters:
 - `username`: GitHub username
@@ -175,6 +192,27 @@ Example usage:
 ```
 Action: get_user_repos
 Parameter (username): halilsafakkilic
+```
+
+### analyze_user_repos
+
+Fetches a user's GitHub repositories and generates an LLM-powered summary using **Sampling** (`ctx.sample()`). Requires Anthropic API key to be configured.
+
+Parameters:
+- `username`: GitHub username
+
+Example usage:
+```
+Action: analyze_user_repos
+Parameter (username): halilsafakkilic
+```
+
+## Testing
+
+Run the test suite with pytest:
+
+```bash
+uv run pytest tests/ -v
 ```
 
 ## License

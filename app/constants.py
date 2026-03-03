@@ -15,3 +15,6 @@ ROOT_DIR = get_root_dir()
 SHTTP_PORT = int(os.getenv("SHTTP_PORT", 8080))
 SSE_PORT = int(os.getenv("SSE_PORT", 8081))
 GITHUB_API_TIMEOUT = int(os.getenv("GITHUB_API_TIMEOUT", 30))
+
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-haiku-4-5-20251001")

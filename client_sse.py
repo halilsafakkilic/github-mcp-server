@@ -1,36 +1,36 @@
 import asyncio
 
-from mcp.client.sse import sse_client
-from mcp import ClientSession
-from mcp.types import CallToolResult
-from pydantic import AnyUrl
+from fastmcp import Client
 
 from app.constants import SSE_PORT
-
-server_params = {
-    "url": f"http://localhost:{SSE_PORT}/sse",
-}
+from lib.sampling import build_sampling_handler
 
 
 async def main():
-    async with sse_client(**server_params) as (sse, write):
-        async with ClientSession(sse, write) as session:
-            await session.initialize()
+    async with Client(
+        f"http://localhost:{SSE_PORT}/sse",
+        sampling_handler=build_sampling_handler(),
+    ) as client:
+        resources = await client.list_resources()
+        print("listResources", resources)
 
-            response = await session.list_resources()
-            print("listResources", response)
+        greeting = await client.read_resource("greeting://HSK")
+        print("readResource", greeting)
 
-            response = await session.read_resource(AnyUrl("greeting://HSK"))
-            print("readResource", response)
+        prompts = await client.list_prompts()
+        print("listPrompts", prompts)
 
-            response = await session.list_prompts()
-            print("listPrompts", response)
+        tools = await client.list_tools()
+        print("listTools", tools)
 
-            response = await session.list_tools()
-            print("listTools", response)
+        result = await client.call_tool("get_user_repos", {"username": "halilsafakkilic"})
+        print("get_user_repos", result)
 
-            response: CallToolResult = await session.call_tool("get_user_repos", {"username": "halilsafakkilic"})
-            print("response", response)
+        try:
+            analysis = await client.call_tool("analyze_user_repos", {"username": "halilsafakkilic"})
+            print("analyze_user_repos", analysis)
+        except Exception as e:
+            print("Error calling analyze_user_repos:", e)
 
 
 if __name__ == "__main__":

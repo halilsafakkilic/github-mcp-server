@@ -1,36 +1,35 @@
 import asyncio
 
-from mcp.client.stdio import stdio_client
-from mcp import ClientSession, StdioServerParameters
-from mcp.types import CallToolResult
-from pydantic import AnyUrl
+from fastmcp import Client
+from fastmcp.client.transports import StdioTransport
 
-server_params = StdioServerParameters(
-    command="uv",
-    args=["run", "server"],
-    # env=None
-)
+from lib.sampling import build_sampling_handler
+
+transport = StdioTransport(command="uv", args=["run", "server"])
 
 
 async def main():
-    async with stdio_client(server_params) as (stdio, write):
-        async with ClientSession(stdio, write) as session:
-            await session.initialize()
+    async with Client(transport, sampling_handler=build_sampling_handler()) as client:
+        resources = await client.list_resources()
+        print("listResources", resources)
 
-            response = await session.list_resources()
-            print("listResources", response)
+        greeting = await client.read_resource("greeting://HSK")
+        print("readResource", greeting)
 
-            response = await session.read_resource(AnyUrl("greeting://HSK"))
-            print("readResource", response)
+        prompts = await client.list_prompts()
+        print("listPrompts", prompts)
 
-            response = await session.list_prompts()
-            print("listPrompts", response)
+        tools = await client.list_tools()
+        print("listTools", tools)
 
-            response = await session.list_tools()
-            print("listTools", response)
+        result = await client.call_tool("get_user_repos", {"username": "halilsafakkilic"})
+        print("get_user_repos", result)
 
-            response: CallToolResult = await session.call_tool("get_user_repos", {"username": "halilsafakkilic"})
-            print("response", response)
+        try:
+            analysis = await client.call_tool("analyze_user_repos", {"username": "halilsafakkilic"})
+            print("analyze_user_repos", analysis)
+        except Exception as e:
+            print("Error calling analyze_user_repos:", e)
 
 
 if __name__ == "__main__":
